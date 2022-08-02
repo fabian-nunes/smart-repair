@@ -7,7 +7,7 @@
 <script>
 import NavBar from "@/components/NavBar";
 import FooterSmart from "@/components/FooterSmart";
-import DashboardMain from "@/components/DashboardMain";
+import DashboardMain from "@/components/Dashboard/DashboardMain";
 
 import './assets/tailwind.css';
 
