@@ -1,7 +1,9 @@
 <template>
-  <NavBar></NavBar>
-  <DashboardMain></DashboardMain>
-  <FooterSmart></FooterSmart>
+  <main class="bg-gray-200 flex flex-col min-h-screen">
+    <NavBar></NavBar>
+    <DashboardMain></DashboardMain>
+    <FooterSmart class="mt-auto"></FooterSmart>
+  </main>
 </template>
 
 <script>

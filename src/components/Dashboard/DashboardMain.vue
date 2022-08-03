@@ -1,18 +1,11 @@
 <template>
-  <section class="m-6">
+  <section class="h-[75vh]">
 
-    <div class="bg-white border-gray-200 px-2 sm:px-4 py-2.5 dark:bg-gray-600 rounded-2xl m-5">
-      <h2 class="text-white flex justify-center font-bold text-2xl">Repairs</h2>
-    </div>
+    <div class="m-6">
+      <DashBadge></DashBadge>
 
-    <div class="grid grid-cols-3 gap-3">
-      <CardBody tRepair="0"></CardBody>
-      <CardBody tRepair="1"></CardBody>
-      <CardBody tRepair="2"></CardBody>
-    </div>
+      <DashGraphic class="flex justify-center"></DashGraphic>
 
-    <div class="bg-white border-gray-200 px-2 sm:px-4 py-2.5 dark:bg-gray-600 rounded-2xl m-5">
-      <h2 class="text-white flex justify-center font-bold text-2xl">Clients</h2>
     </div>
 
   </section>
@@ -20,12 +13,14 @@
 
 <script>
 
-import CardBody from "@/components/Dashboard/CardBody";
+import DashBadge from "@/components/Dashboard/DashBadge";
+import DashGraphic from "@/components/Dashboard/DashGraphic";
 
 export default {
   name: "DashboardMain",
   components: {
-    CardBody
+    DashBadge,
+    DashGraphic
   }
 }
 </script>
