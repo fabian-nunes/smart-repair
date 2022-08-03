@@ -2,11 +2,12 @@
   <section class="m-6 h-[75vh]">
     <ClientBadge></ClientBadge>
     <ClientABTN @open="open"></ClientABTN>
-    <div class="flex justify-center">
-      <ClientTable class="w-1/2 h-1/2"></ClientTable>
+
+    <div class="flex justify-center" v-if="render">
+      <ClientTable class="w-1/2 h-1/4"></ClientTable>
     </div>
     <Teleport to="body">
-      <ModalCC :show="show" @close="close"></ModalCC>
+      <ModalCC :show="show" @close="close" @reRender="reRender"></ModalCC>
     </Teleport>
   </section>
 </template>
@@ -28,7 +29,8 @@ export default {
   },
   data() {
     return {
-      show: false
+      show: false,
+      render: true
     };
   },
   methods: {
@@ -37,7 +39,14 @@ export default {
     },
     close() {
       this.show = false;
-    }
+    },
+    reRender() {
+      this.render = false;
+      this.$nextTick(() => {
+        this.render = true;
+      });
+    },
+
   }
 }
 </script>
