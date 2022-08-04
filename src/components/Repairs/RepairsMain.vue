@@ -1,10 +1,18 @@
 <template>
-  <h1>Hello</h1>
+  <section class="m-6 h-[75vh]">
+    <RepairsBadge></RepairsBadge>
+  </section>
 </template>
 
 <script>
+
+import RepairsBadge from "@/components/Repairs/RepairsBadge";
+
 export default {
-  name: "RepairsMain"
+  name: "RepairsMain",
+  components: {
+    RepairsBadge
+  },
 }
 </script>
 

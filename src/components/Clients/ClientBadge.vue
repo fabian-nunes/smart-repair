@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: "DashBadge",
+  name: "ClientBadge",
 }
 </script>
 

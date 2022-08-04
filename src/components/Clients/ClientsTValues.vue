@@ -15,6 +15,9 @@
     <td class="py-4 px-6 text-right">
       <a href="#" @click="openEdit(index)" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
     </td>
+    <td class="py-4 px-6 text-right">
+      <a href="#" @click="deleteClient(index)" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a>
+    </td>
   </tr>
 
   <Teleport to="body">
@@ -41,6 +44,7 @@ export default {
       ePhone: "",
       eId: "",
       index: 0,
+      type: 0,
     };
   },
   methods: {
@@ -74,7 +78,7 @@ export default {
         })
       }).then(res => res).then(res => {
         if (res.ok) {
-          this.success();
+          this.success('Client updated successfully');
           this.resetValues();
         } else {
           this.error(res.statusText);
@@ -87,13 +91,13 @@ export default {
       this.clients[this.index].phone = this.ePhone;
       this.closeEdit();
     },
-    success() {
+    success(message) {
       this.$swal({
         title: 'Success!',
-        text: 'Client updated successfully!',
+        text: message,
         icon: 'success',
         button: 'OK'
-      })
+      });
     },
     error(message) {
       this.$swal({
@@ -101,8 +105,64 @@ export default {
         text: message,
         icon: 'error',
         button: 'OK'
-      })
+      });
     },
+    deleteClient(key) {
+      this.$swal({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.deleteFetch(this.clients[key]._id, key);
+        }
+      });
+    },
+    deleteFetch(id, key) {
+      fetch(`http://localhost:3000/clients/${id}`, {
+        method: "DELETE"
+      }).then(res => res).then(res => {
+        if (res.ok) {
+          this.success('Client deleted successfully');
+          this.clients.splice(key, 1);
+        } else {
+          this.error(res.statusText);
+        }
+      });
+    },
+    sortTableA(a, b) {
+      if ( a.repairs.length < b.repairs.length ){
+        return -1;
+      }
+      if ( a.repairs.length > b.repairs.length ){
+        return 1;
+      }
+      return 0;
+    },
+
+    sortTableD(a, b) {
+      if ( b.repairs.length < a.repairs.length ){
+        return -1;
+      }
+      if ( b.repairs.length > a.repairs.length ){
+        return 1;
+      }
+      return 0;
+    },
+
+    sortRepairs() {
+      if (this.type === 0) {
+        this.clients.sort(this.sortTableA);
+        this.type = 1;
+      } else {
+        this.clients.sort(this.sortTableD);
+        this.type = 0;
+      }
+    }
   },
   mounted() {
     fetch("http://localhost:3000/clients")
