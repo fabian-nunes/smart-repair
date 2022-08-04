@@ -1,5 +1,5 @@
 <template>
-  <tr v-for="client in clients" :key="client.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+  <tr v-for="(client, index) in clients" :key="client.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
     <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
       {{ client.name }}
     </th>
@@ -13,18 +13,96 @@
       {{ client.repairs.length }}
     </td>
     <td class="py-4 px-6 text-right">
-      <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+      <a href="#" @click="openEdit(index)" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
     </td>
   </tr>
+
+  <Teleport to="body">
+    <ModalCE :show-edit="showEdit" @update-client="updateClient" @close-edit="closeEdit" :email="eEmail" :phone="ePhone" :name="eName"></ModalCE>
+  </Teleport>
+
 </template>
 
 <script>
+
+import ModalCE from "@/components/Clients/ModalCE";
+
 export default {
   name: "ClientsTValues",
+  components: {
+    ModalCE
+  },
   data() {
     return {
       clients: [],
+      showEdit: false,
+      eName: "",
+      eEmail: "",
+      ePhone: "",
+      eId: "",
+      index: 0,
     };
+  },
+  methods: {
+    openEdit(key) {
+      this.eName = this.clients[key].name;
+      this.eEmail = this.clients[key].email;
+      this.ePhone = this.clients[key].phone;
+      this.eId = this.clients[key]._id;
+      this.index = key;
+
+      this.showEdit = true;
+    },
+    closeEdit() {
+      this.showEdit = false;
+    },
+    updateClient(name, email, phone) {
+
+      this.eName = name;
+      this.eEmail = email;
+      this.ePhone = phone;
+
+      fetch(`http://localhost:3000/clients/${this.eId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: this.eName,
+          email: this.eEmail,
+          phone: this.ePhone
+        })
+      }).then(res => res).then(res => {
+        if (res.ok) {
+          this.success();
+          this.resetValues();
+        } else {
+          this.error(res.statusText);
+        }
+      });
+    },
+    resetValues() {
+      this.clients[this.index].name = this.eName;
+      this.clients[this.index].email = this.eEmail;
+      this.clients[this.index].phone = this.ePhone;
+      this.closeEdit();
+    },
+    success() {
+      this.$swal({
+        title: 'Success!',
+        text: 'Client updated successfully!',
+        icon: 'success',
+        button: 'OK'
+      })
+    },
+    error(message) {
+      this.$swal({
+        title: 'Error!',
+        text: message,
+        icon: 'error',
+        button: 'OK'
+      })
+    },
   },
   mounted() {
     fetch("http://localhost:3000/clients")
