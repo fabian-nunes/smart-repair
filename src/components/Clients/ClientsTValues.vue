@@ -1,15 +1,15 @@
 <template>
-  <tr v-for="(client, index) in clients" :key="client.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-    <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+  <tr v-for="(client, index) in clients" :key="client.id"  class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+    <th scope="row" @click="openV(index)" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
       {{ client.name }}
     </th>
-    <td class="py-4 px-6">
+    <td @click="openV(index)" class="py-4 px-6">
       {{ client.phone }}
     </td>
-    <td class="py-4 px-6">
+    <td @click="openV(index)" class="py-4 px-6">
       {{ client.email }}
     </td>
-    <td class="py-4 px-6">
+    <td @click="openV(index)" class="py-4 px-6">
       {{ client.repairs.length }}
     </td>
     <td class="py-4 px-6 text-right">
@@ -24,21 +24,28 @@
     <ModalCE :show-edit="showEdit" @update-client="updateClient" @close-edit="closeEdit" :email="eEmail" :phone="ePhone" :name="eName"></ModalCE>
   </Teleport>
 
+  <Teleport to="body">
+    <ModalCV  class="align-middle" v-show="showV" @close-v="closeV" :name-v="nameV" :email-v="emailV" :phone-v="phoneV" :repairs-v="repairsV"></ModalCV>
+  </Teleport>
+
 </template>
 
 <script>
 
 import ModalCE from "@/components/Clients/ModalCE";
+import ModalCV from "@/components/Clients/ModalCV";
 
 export default {
   name: "ClientsTValues",
   components: {
-    ModalCE
+    ModalCE,
+    ModalCV
   },
   data() {
     return {
       clients: [],
       showEdit: false,
+      showV: false,
       eName: "",
       eEmail: "",
       ePhone: "",
@@ -46,6 +53,10 @@ export default {
       index: 0,
       type: 0,
       clientsCopy: [],
+      nameV: "",
+      emailV: "",
+      phoneV: "",
+      repairsV: [],
     };
   },
   methods: {
@@ -60,6 +71,16 @@ export default {
     },
     closeEdit() {
       this.showEdit = false;
+    },
+    openV(key) {
+      this.nameV = this.clients[key].name;
+      this.emailV = this.clients[key].email;
+      this.phoneV = this.clients[key].phone;
+      this.repairsV = this.clients[key].repairs;
+      this.showV = true;
+    },
+    closeV() {
+      this.showV = false;
     },
     updateClient(name, email, phone) {
 
