@@ -15,7 +15,9 @@ const router = createRouter({
         { path: '/', component: DashboardMain },
         { path: '/repairs', component: RepairsMain },
         { path: '/clients', component: ClientsMain },
-        ]
+        ],
+    linkActiveClass: 'active',
+    linkExactActiveClass: 'text-white bg-blue-700 md:bg-transparent md:text-blue-700 pointer-events-none',
 });
 
 const app = createApp(App);

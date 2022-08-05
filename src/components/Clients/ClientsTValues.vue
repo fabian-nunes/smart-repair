@@ -45,6 +45,7 @@ export default {
       eId: "",
       index: 0,
       type: 0,
+      clientsCopy: [],
     };
   },
   methods: {
@@ -89,6 +90,7 @@ export default {
       this.clients[this.index].name = this.eName;
       this.clients[this.index].email = this.eEmail;
       this.clients[this.index].phone = this.ePhone;
+      this.copyValues()
       this.closeEdit();
     },
     success(message) {
@@ -129,6 +131,7 @@ export default {
         if (res.ok) {
           this.success('Client deleted successfully');
           this.clients.splice(key, 1);
+          this.copyValues()
         } else {
           this.error(res.statusText);
         }
@@ -162,6 +165,18 @@ export default {
         this.clients.sort(this.sortTableD);
         this.type = 0;
       }
+    },
+    filterTable(e) {
+      if (e === '') {
+        this.clients = this.clientsCopy;
+      } else {
+        this.clients = this.clientsCopy.filter(client => {
+          return client.name.toLowerCase().includes(e.toLowerCase());
+        });
+      }
+    },
+    copyValues() {
+      this.clientsCopy = this.clients;
     }
   },
   mounted() {
@@ -169,6 +184,7 @@ export default {
       .then(response => response.json())
       .then(data => {
         this.clients = data;
+        this.copyValues();
       });
   }
 }
