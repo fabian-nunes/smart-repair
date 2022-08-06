@@ -60,6 +60,8 @@ export default {
       priceV: "",
       descriptionV: "",
       clientV: "",
+      sortS: 0,
+      repairCopy: [],
     };
   },
   methods: {
@@ -152,6 +154,7 @@ export default {
       this.repairs[this.index].name = this.eName;
       this.repairs[this.index].price = this.ePrice;
       this.repairs[this.index].description = this.eDescription;
+      this.copyValues();
       this.closeEdit();
     },
     closeEdit() {
@@ -179,6 +182,7 @@ export default {
         if (res.ok) {
           this.success('Repair deleted successfully');
           this.repairs.splice(key, 1);
+          this.copyValues();
         } else {
           this.error(res.statusText);
         }
@@ -194,12 +198,80 @@ export default {
     closeV() {
       this.showV = false;
     },
+    sortTableAS(a, b) {
+      if ( a.status < b.status ){
+        return -1;
+      }
+      if ( a.status > b.status ){
+        return 1;
+      }
+      return 0;
+    },
+    sortTableAP(a, b) {
+      if ( a.price < b.price ){
+        return -1;
+      }
+      if ( a.price > b.price ){
+        return 1;
+      }
+      return 0;
+    },
+    sortTableDS(a, b) {
+      if ( b.status < a.status ){
+        return -1;
+      }
+      if ( b.status > a.status ){
+        return 1;
+      }
+      return 0;
+    },
+    sortTableDP(a, b) {
+      if ( b.price < a.price ){
+        return -1;
+      }
+      if ( b.price > a.price ){
+        return 1;
+      }
+      return 0;
+    },
+    sortTable(type) {
+      if (type === 0) {
+        if (this.sortS === 0) {
+          this.repairs.sort(this.sortTableAS);
+          this.sortS = 1
+        } else {
+          this.repairs.sort(this.sortTableDS);
+          this.sortS = 0;
+        }
+      } else {
+        if (this.sortS === 0) {
+          this.repairs.sort(this.sortTableAP);
+          this.sortS = 1
+        } else {
+          this.repairs.sort(this.sortTableDP);
+          this.sortS = 0;
+        }
+      }
+    },
+    filterTable(e) {
+      if (e === '') {
+        this.repairs = this.repairCopy;
+      } else {
+        this.repairs = this.repairCopy.filter(repair => {
+          return repair.name.toLowerCase().includes(e.toLowerCase());
+        });
+      }
+    },
+    copyValues() {
+      this.repairCopy = this.repairs;
+    }
   },
   mounted() {
     fetch("http://localhost:3000/repairs")
         .then(response => response.json())
         .then(data => {
           this.repairs = data;
+          this.copyValues();
         });
   },
 }
