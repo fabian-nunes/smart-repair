@@ -16,22 +16,40 @@
       <span v-else class="bg-green-100 text-green-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900 pointer-events-none">Done</span>
     </td>
     <td class="py-4 px-6 text-right">
-      <a href="#"  class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+      <button v-if="repair.status === 0" @click="openEdit(index)" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
+      <button v-else class="font-mediumtext-gray-200 dark:text-gray-100 hover:underline pointer-events-none">Edit</button>
     </td>
     <td class="py-4 px-6 text-right">
-      <a href="#"  class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a>
+      <button v-if="repair.status === 0 || repair.status === 3" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</button>
+      <button v-else class="font-mediumtext-gray-200 dark:text-gray-100 hover:underline pointer-events-none">Delete</button>
     </td>
   </tr>
+
+  <Teleport to="body">
+    <ModalRE :show-edit="showEdit" @update-repair="updateRepair" @close-edit="closeEdit" :name="eName" :price="ePrice" :description="eDescription"></ModalRE>
+  </Teleport>
 
 </template>
 
 
 <script>
+
+import ModalRE from "@/components/Repairs/ModalRE";
+
 export default {
   name: "RepairsTValues",
+  components: {
+    ModalRE
+  },
   data() {
     return {
       repairs: [],
+      showEdit: false,
+      eName: "",
+      ePrice: "",
+      eDescription: "",
+      eId: "",
+      index : 0,
     };
   },
   methods: {
@@ -85,6 +103,49 @@ export default {
         icon: 'error',
         button: 'OK'
       });
+    },
+    updateRepair(name, price, description) {
+
+      this.eName = name;
+      this.ePrice = price;
+      this.eDescription = description;
+
+      fetch(`http://localhost:3000/repairs/${this.eId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: name,
+          price: price,
+          description: description,
+        })
+      }).then(res => res).then(res => {
+        if (res.ok) {
+          this.success('Repair updated successfully');
+          this.resetValues();
+        } else {
+          this.error(res.statusText);
+        }
+      });
+    },
+    openEdit(key) {
+      this.eName = this.repairs[key].name;
+      this.ePrice = this.repairs[key].price;
+      this.eDescription = this.repairs[key].description;
+      this.eId = this.repairs[key]._id;
+      this.index = key;
+
+      this.showEdit = true;
+    },
+    resetValues() {
+      this.repairs[this.index].name = this.eName;
+      this.repairs[this.index].price = this.ePrice;
+      this.repairs[this.index].description = this.eDescription;
+      this.closeEdit();
+    },
+    closeEdit() {
+      this.showEdit = false;
     },
   },
   mounted() {

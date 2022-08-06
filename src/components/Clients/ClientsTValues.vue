@@ -13,10 +13,10 @@
       {{ client.repairs.length }}
     </td>
     <td class="py-4 px-6 text-right">
-      <a href="#" @click="openEdit(index)" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+      <button @click="openEdit(index)" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
     </td>
     <td class="py-4 px-6 text-right">
-      <a href="#" @click="deleteClient(index)" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a>
+      <button @click="deleteClient(index)" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</button>
     </td>
   </tr>
 
@@ -136,8 +136,8 @@ export default {
         text: "You won't be able to revert this!",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#848484',
         confirmButtonText: 'Yes, delete it!'
       }).then((result) => {
         if (result.isConfirmed) {
