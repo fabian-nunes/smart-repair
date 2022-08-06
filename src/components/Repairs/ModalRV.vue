@@ -16,13 +16,10 @@
           </div>
           <!-- Modal body -->
           <div class="p-6 space-y-6">
-            <p class="text-base leading-relaxed text-white dark:text-white">Client's Name: {{nameV}}</p>
-            <p class="text-base leading-relaxed text-white dark:text-white">Client's Email: {{emailV}}</p>
-            <p class="text-base leading-relaxed text-white dark:text-white">Client's Phone Number: {{phoneV}}</p>
-            <p class="text-base leading-relaxed text-white dark:text-white">Repairs ordered by the client :</p>
-            <ul class="list-disc list-inside">
-              <li v-for="repair in repairsV" :key="repair.id" class="text-base leading-relaxed text-white dark:text-white">{{repair.name}}</li>
-            </ul>
+            <p class="text-base leading-relaxed text-white dark:text-white">Repair's Title: {{nameV}}</p>
+            <p class="text-base leading-relaxed text-white dark:text-white">Repair's Cost: {{priceV}}</p>
+            <p class="text-base leading-relaxed text-white dark:text-white">Client's Name: {{clientV}}</p>
+            <p class="text-base leading-relaxed text-white dark:text-white">Description: {{descriptionV}}</p>
           </div>
         </div>
       </div>
@@ -32,8 +29,7 @@
 
 <script>
 export default {
-  name: "ModalCV",
-  emits: ["closeV"],
+  name: "ModalRV",
   props: {
     showV: {
       type: Boolean,
@@ -43,19 +39,19 @@ export default {
       type: String,
       default: ""
     },
-    emailV: {
+    priceV: {
       type: String,
       default: ""
     },
-    phoneV: {
+    descriptionV: {
       type: String,
       default: ""
     },
-    repairsV: {
-      type: Array,
-      default: () => []
+    clientV: {
+      type: String,
+      default: ""
     }
-  },
+  }
 }
 </script>
 
