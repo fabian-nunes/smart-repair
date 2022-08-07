@@ -31,11 +31,17 @@ export default {
     };
   },
   methods: {
-    submit() {
+    async submit() {
       if (this.password !== this.confirmPassword) {
         alert("Passwords do not match");
       } else {
-        alert("Registration successful");
+        await this.$store.dispatch("auth/register", {
+          email: this.email,
+          password: this.password,
+        });
+        localStorage.setItem("token", this.$store.getters["auth/getToken"]);
+        this.$router.replace("/clients");
+        //alert(this.$store.getters["auth/getToken"]);
       }
     },
   },

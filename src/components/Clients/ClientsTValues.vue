@@ -201,8 +201,12 @@ export default {
     }
   },
   mounted() {
-    fetch("http://localhost:3000/clients")
-      .then(response => response.json())
+    fetch("http://localhost:3000/api/clients", {
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": this.$store.getters["auth/getToken"]
+      }
+    }).then(response => response.json())
       .then(data => {
         this.clients = data;
         this.copyValues();

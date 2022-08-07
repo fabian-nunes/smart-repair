@@ -17,7 +17,10 @@ export default {
   components: {
     NavBar,
     FooterSmart,
-  }
+  },
+  mounted() {
+    this.$store.dispatch('auth/tryLogin');
+  },
 }
 </script>
 

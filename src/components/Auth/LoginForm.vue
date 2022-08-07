@@ -38,7 +38,10 @@ export default {
   },
   methods: {
     submitForm() {
-      alert('Login: ' + this.email + ' ' + this.password + ' ' + this.remember);
+      this.$store.dispatch("auth/login", {
+        email: this.email,
+        password: this.password,
+      });
     }
   }
 }

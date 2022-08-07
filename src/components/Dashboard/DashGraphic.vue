@@ -76,7 +76,12 @@ export default {
     };
   },
   mounted() {
-    fetch("http://localhost:3000/repairs")
+    fetch("http://localhost:3000/api/repairs", {
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": this.$store.getters.getToken
+      }
+    })
       .then(response => response.json())
       .then(data => {
         for (const key in data) {

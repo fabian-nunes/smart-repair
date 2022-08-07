@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     submitForm() {
-      fetch('http://localhost:3000/repairs', {
+      fetch('http://localhost:3000/api/repairs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
