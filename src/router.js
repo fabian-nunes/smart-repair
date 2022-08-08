@@ -3,6 +3,7 @@ import DashboardMain from "@/components/Dashboard/DashboardMain";
 import RepairsMain from "@/components/Repairs/RepairsMain";
 import ClientsMain from "@/components/Clients/ClientsMain";
 import AuthMain from "@/components/Auth/AuthMain";
+import Error404Page from "@/components/Errors/Error404Page";
 import store from "@/store";
 
 const router = createRouter({
@@ -12,6 +13,7 @@ const router = createRouter({
         { path: '/repairs', component: RepairsMain, meta: { requiresAuth: true } },
         { path: '/clients', component: ClientsMain, meta: { requiresAuth: true } },
         { path: '/auth', component: AuthMain, meta: { requiresUnauth: true } },
+        { path: '/:notFound(.*)', component: Error404Page },
     ],
     linkActiveClass: 'active',
     linkExactActiveClass: 'text-white bg-blue-700 md:bg-transparent md:text-blue-700 pointer-events-none',
