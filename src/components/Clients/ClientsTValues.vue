@@ -88,7 +88,7 @@ export default {
       this.eEmail = email;
       this.ePhone = phone;
 
-      fetch(`http://localhost:3000/clients/${this.eId}`, {
+      fetch(`http://localhost:3000/api/clients/${this.eId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json"
@@ -146,7 +146,7 @@ export default {
       });
     },
     deleteFetch(id, key) {
-      fetch(`http://localhost:3000/clients/${id}`, {
+      fetch(`http://localhost:3000/api/clients/${id}`, {
         method: "DELETE"
       }).then(res => res).then(res => {
         if (res.ok) {

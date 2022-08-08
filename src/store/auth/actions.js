@@ -22,14 +22,17 @@ export default {
                     }),
                 }).then(response => {
                     const token = response.headers.get('auth-token');
-                    localStorage.setItem("token", token);
                     context.commit('setToken', {token: token});
+                    context.commit('setError', {error: false, errorMessage: ''});
                 });
+            } else {
+                //console.log(res.statusText);
+                context.commit('setError', {error: true, errorMessage: res.statusText});
             }
         });
     },
-    login: (context, payload) => {
-        fetch('http://localhost:3000/api/auth/login', {
+    login: async (context, payload) => {
+        await fetch('http://localhost:3000/api/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -41,7 +44,10 @@ export default {
         }).then(res => res).then(res => {
             if (res.ok) {
                 const token = res.headers.get('auth-token');
-                localStorage.setItem("token", token);
+                context.commit('setToken', {token: token});
+                context.commit('setError', {error: false, errorMessage: ''});
+            } else {
+                context.commit('setError', {error: true, errorMessage: res.statusText});
             }
         });
     },

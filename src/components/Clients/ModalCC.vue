@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     submitForm() {
-      fetch('http://localhost:3000/clients', {
+      fetch('http://localhost:3000/api/clients', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

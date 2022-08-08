@@ -111,7 +111,7 @@ export default {
     },
   },
   mounted() {
-    fetch('http://localhost:3000/clients')
+    fetch('http://localhost:3000/api/clients')
       .then(res => res.json())
       .then(res => {
         this.clients = res;

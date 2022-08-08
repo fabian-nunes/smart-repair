@@ -7,6 +7,8 @@ export default {
     state: {
         token: '',
         loged: false,
+        error: false,
+        errorText: '',
     },
     mutations: authMutations,
     getters: authGetters,

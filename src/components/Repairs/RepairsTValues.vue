@@ -83,7 +83,7 @@ export default {
       });
     },
     updateStatus(id, status, index) {
-      fetch(`http://localhost:3000/repairs/status/${id}`, {
+      fetch(`http://localhost:3000/api/repairs/status/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json"
@@ -122,7 +122,7 @@ export default {
       this.ePrice = price;
       this.eDescription = description;
 
-      fetch(`http://localhost:3000/repairs/${this.eId}`, {
+      fetch(`http://localhost:3000/api/repairs/${this.eId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json"
@@ -176,7 +176,7 @@ export default {
       });
     },
     deleteFetch(id, key) {
-      fetch(`http://localhost:3000/repairs/${id}`, {
+      fetch(`http://localhost:3000/api/repairs/${id}`, {
         method: "DELETE"
       }).then(res => res).then(res => {
         if (res.ok) {
@@ -267,7 +267,7 @@ export default {
     }
   },
   mounted() {
-    fetch("http://localhost:3000/repairs")
+    fetch("http://localhost:3000/api/repairs")
         .then(response => response.json())
         .then(data => {
           this.repairs = data;

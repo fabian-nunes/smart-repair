@@ -25,6 +25,7 @@ router.beforeEach((to, from, next) => {
                 query: { redirect: to.fullPath },
             });
         } else {
+            //alert('You are logged in');
             next();
         }
     } else if (to.matched.some(record => record.meta.requiresUnauth)) {

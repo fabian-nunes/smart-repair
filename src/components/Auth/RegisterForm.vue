@@ -39,10 +39,33 @@ export default {
           email: this.email,
           password: this.password,
         });
-        localStorage.setItem("token", this.$store.getters["auth/getToken"]);
-        this.$router.replace("/clients");
+
+        if (this.$store.getters["auth/getError"]) {
+          this.error(this.$store.getters["auth/getErrorMessage"]);
+        } else {
+          localStorage.setItem("token", this.$store.getters["auth/getToken"]);
+          this.success();
+          this.$router.replace("/");
+        }
+
         //alert(this.$store.getters["auth/getToken"]);
       }
+    },
+    success() {
+      this.$swal({
+        title: 'Success!',
+        text: 'Account created successfully!',
+        icon: 'success',
+        button: 'OK'
+      });
+    },
+    error(message) {
+      this.$swal({
+        title: 'Error!',
+        text: message,
+        icon: 'error',
+        button: 'OK'
+      });
     },
   },
 }
