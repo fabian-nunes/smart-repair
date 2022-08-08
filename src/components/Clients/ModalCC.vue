@@ -51,25 +51,36 @@ export default {
   },
   methods: {
     submitForm() {
-      fetch('http://localhost:3000/api/clients', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: this.name,
-          email: this.email,
-          phone: this.phone
-        })
-      }).then(res => res).then(res => {
-        if (res.ok) {
-          this.success();
-          this.resetValues();
+      if (isNaN(this.phone)) {
+        this.error('Phone number must be a number');
+        this.phone = '';
+      } else {
+        if(this.phone.length < 9) {
+          this.error('Phone number must be 9 digits');
+          this.phone = '';
         } else {
-          this.error(res.statusText);
+          fetch('http://localhost:3000/api/clients', {
+            method: 'POST',
+            headers: {
+              "Content-Type": "application/json",
+              "auth-token": this.$store.getters["auth/getToken"]
+            },
+            body: JSON.stringify({
+              name: this.name,
+              email: this.email,
+              phone: this.phone
+            })
+          }).then(res => res).then(res => {
+            if (res.ok) {
+              this.success();
+              this.resetValues();
+            } else {
+              this.error(res.statusText);
 
+            }
+          });
         }
-      });
+      }
     },
     resetValues() {
       this.name = '';

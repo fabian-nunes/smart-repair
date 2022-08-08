@@ -79,7 +79,7 @@ export default {
     fetch("http://localhost:3000/api/repairs", {
       headers: {
         "Content-Type": "application/json",
-        "auth-token": this.$store.getters.getToken
+        "auth-token": this.$store.getters["auth/getToken"]
       }
     })
       .then(response => response.json())

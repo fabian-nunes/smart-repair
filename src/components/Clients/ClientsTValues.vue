@@ -88,24 +88,37 @@ export default {
       this.eEmail = email;
       this.ePhone = phone;
 
-      fetch(`http://localhost:3000/api/clients/${this.eId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          name: this.eName,
-          email: this.eEmail,
-          phone: this.ePhone
-        })
-      }).then(res => res).then(res => {
-        if (res.ok) {
-          this.success('Client updated successfully');
-          this.resetValues();
+      if (isNaN(this.ePhone)) {
+        this.error('Phone number must be a number');
+        this.ePhone = '';
+      } else {
+        if(this.ePhone.length < 9) {
+          this.error('Phone number must be 9 digits');
+          this.ePhone = '';
         } else {
-          this.error(res.statusText);
+          fetch(`http://localhost:3000/api/clients/${this.eId}`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              "auth-token": this.$store.getters["auth/getToken"]
+            },
+            body: JSON.stringify({
+              name: this.eName,
+              email: this.eEmail,
+              phone: this.ePhone
+            })
+          }).then(res => res).then(res => {
+            if (res.ok) {
+              this.success('Client updated successfully');
+              this.resetValues();
+            } else {
+              this.error(res.statusText);
+            }
+          });
         }
-      });
+      }
+
+
     },
     resetValues() {
       this.clients[this.index].name = this.eName;
@@ -147,7 +160,11 @@ export default {
     },
     deleteFetch(id, key) {
       fetch(`http://localhost:3000/api/clients/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": this.$store.getters["auth/getToken"]
+        }
       }).then(res => res).then(res => {
         if (res.ok) {
           this.success('Client deleted successfully');

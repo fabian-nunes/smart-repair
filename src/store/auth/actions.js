@@ -56,5 +56,9 @@ export default {
         if (token) {
             context.commit('setToken', {token: token});
         }
+    },
+    logout: (context) => {
+        localStorage.removeItem("token");
+        context.commit('removeToken');
     }
 }

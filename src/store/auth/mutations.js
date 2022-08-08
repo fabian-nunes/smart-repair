@@ -6,5 +6,9 @@ export default {
     setError(state, payload) {
         state.error = payload.error;
         state.errorMessage = payload.errorMessage;
+    },
+    removeToken(state) {
+        state.token = '';
+        state.loged = false;
     }
 }

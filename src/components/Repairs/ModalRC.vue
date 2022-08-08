@@ -64,26 +64,35 @@ export default {
   },
   methods: {
     submitForm() {
-      fetch('http://localhost:3000/api/repairs', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: this.name,
-          description: this.description,
-          price: this.price,
-          client: this.clientID,
-        })
-      }).then(res => res).then(res => {
-        if (res.ok) {
-          this.success();
-          this.resetValues();
-        } else {
-          this.error(res.statusText);
+      if (this.clientID === '') {
+        this.error('Please select a client');
+      } else {
+        if (!isNaN(this.price) && !isNaN(parseFloat(this.price))) {
+          fetch('http://localhost:3000/api/repairs', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              "auth-token": this.$store.getters['auth/getToken']
+            },
+            body: JSON.stringify({
+              name: this.name,
+              description: this.description,
+              price: this.price,
+              client: this.clientID,
+            })
+          }).then(res => res).then(res => {
+            if (res.ok) {
+              this.success();
+              this.resetValues();
+            } else {
+              this.error(res.statusText);
 
+            }
+          });
+        } else {
+          this.error('Please enter a valid price');
         }
-      });
+      }
     },
     resetValues() {
       this.name = '';
@@ -111,7 +120,12 @@ export default {
     },
   },
   mounted() {
-    fetch('http://localhost:3000/api/clients')
+    fetch('http://localhost:3000/api/clients', {
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": this.$store.getters['auth/getToken']
+      }
+    })
       .then(res => res.json())
       .then(res => {
         this.clients = res;

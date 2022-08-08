@@ -86,7 +86,8 @@ export default {
       fetch(`http://localhost:3000/api/repairs/status/${id}`, {
         method: "PATCH",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "auth-token": this.$store.getters["auth/getToken"]
         },
         body: JSON.stringify({
           status: status
@@ -122,24 +123,30 @@ export default {
       this.ePrice = price;
       this.eDescription = description;
 
-      fetch(`http://localhost:3000/api/repairs/${this.eId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          name: name,
-          price: price,
-          description: description,
-        })
-      }).then(res => res).then(res => {
-        if (res.ok) {
-          this.success('Repair updated successfully');
-          this.resetValues();
-        } else {
-          this.error(res.statusText);
-        }
-      });
+      if (!isNaN(this.price) && !isNaN(parseFloat(this.price))) {
+        fetch(`http://localhost:3000/api/repairs/${this.eId}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": this.$store.getters["auth/getToken"]
+          },
+          body: JSON.stringify({
+            name: name,
+            price: price,
+            description: description,
+          })
+        }).then(res => res).then(res => {
+          if (res.ok) {
+            this.success('Repair updated successfully');
+            this.resetValues();
+          } else {
+            this.error(res.statusText);
+          }
+        });
+      } else {
+        this.error("Price must be a number");
+      }
+
     },
     openEdit(key) {
       this.eName = this.repairs[key].name;
@@ -177,7 +184,11 @@ export default {
     },
     deleteFetch(id, key) {
       fetch(`http://localhost:3000/api/repairs/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": this.$store.getters["auth/getToken"]
+        }
       }).then(res => res).then(res => {
         if (res.ok) {
           this.success('Repair deleted successfully');
@@ -267,7 +278,12 @@ export default {
     }
   },
   mounted() {
-    fetch("http://localhost:3000/api/repairs")
+    fetch("http://localhost:3000/api/repairs", {
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": this.$store.getters["auth/getToken"]
+      }
+    })
         .then(response => response.json())
         .then(data => {
           this.repairs = data;
